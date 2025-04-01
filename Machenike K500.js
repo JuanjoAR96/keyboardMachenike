@@ -1,626 +1,201 @@
 export function Name() {
-	return "Machenike K500 - B94";
+    return "Machenike K500 - B94";
 }
 export function Version() {
-	return "1.1.9";
+    return "1.2.1";
 }
 export function VendorId() {
-	return 0x258a;
+    return 0x258a;
 }
 export function ProductId() {
-	return 0x0049;
+    return 0x0049;
 }
 export function Publisher() {
-	return "WhirlwindFX";
+    return "WhirlwindFX";
 }
 export function Documentation() {
-	return "qmk/srgbmods-qmk-firmware";
+    return "https://github.com/SRGBmods/QMK-Firmware";
 }
 export function DeviceType() {
-	return "keyboard";
+    return "keyboard";
 }
 export function Size() {
-	return [35, 11];
-  }
-  export function DefaultPosition() {
-	return [10, 100];
-  }
-  export function DefaultScale() {
-	return 12.0;
-  }
+    return [21, 6];
+}
+export function DefaultPosition() {
+    return [10, 100];
+}
+export function DefaultScale() {
+    return 8.0;
+}
+
+/* ===== CONFIGURACIÓN DE CONTROL ===== */
 export function ControllableParameters() {
-	return [
-		{
-			property: "shutdownMode",
-			group: "lighting",
-			label: "Shutdown Mode",
-			type: "combobox",
-			values: ["SignalRGB", "Hardware"],
-			default: "SignalRGB",
-		},
-		{
-			property: "shutdownColor",
-			group: "lighting",
-			label: "Shutdown Color",
-			type: "color",
-			default: "#000000",
-		},
-		{
-			property: "LightingMode",
-			group: "lighting",
-			label: "Lighting Mode",
-			type: "combobox",
-			values: ["Canvas", "Forced"],
-			default: "Canvas",
-		},
-		{
-			property: "forcedColor",
-			group: "lighting",
-			label: "Forced Color",
-			type: "color",
-			default: "#009bde",
-		},
-	];
+    return [
+        {
+            property: "shutdownMode",
+            group: "lighting",
+            label: "Shutdown Mode",
+            type: "combobox",
+            values: ["SignalRGB", "Hardware"],
+            default: "SignalRGB"
+        },
+        {
+            property: "shutdownColor",
+            group: "lighting",
+            label: "Shutdown Color",
+            type: "color",
+            default: "#000000"
+        },
+        {
+            property: "LightingMode",
+            group: "lighting",
+            label: "Lighting Mode",
+            type: "combobox",
+            values: ["Canvas", "Forced"],
+            default: "Canvas"
+        },
+        {
+            property: "forcedColor",
+            group: "lighting",
+            label: "Forced Color",
+            type: "color",
+            default: "#009bde"
+        }
+    ];
 }
 
-/* global
-shutdownMode:readonly
-shutdownColor:readonly
-LightingMode:readonly
-forcedColor:readonly
-*/
-
-//Plugin Version: Built for Protocol V1.0.6
-
-const vKeys = [
-	27, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 44, 45, 46,
-	144, 145, 19, 192, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 189, 187, 8, 9, 81,
-	87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 220, 20, 65, 83, 68, 70, 71, 72,
-	74, 75, 76, 186, 222, 13, 16, 90, 88, 67, 86, 66, 78, 77, 188, 190, 191, 16,
-	17, 91, 18, 32, 18, 17, 38, 37, 40, 39, 96, 97, 98, 99, 100, 101, 102, 103,
-	104, 105, 111, 106, 109, 107, 13, 110
+/* ===== MAPEO DE TECLAS (K500) ===== */
+const KEYMAP = [
+    { name: "Esc", pos: [0, 0] }, { name: "F1", pos: [1, 0] }, { name: "F2", pos: [1, 1] },
+    { name: "F3", pos: [1, 2] }, { name: "F4", pos: [1, 3] }, { name: "F5", pos: [2, 0] },
+    { name: "F6", pos: [2, 1] }, { name: "F7", pos: [2, 2] }, { name: "F8", pos: [2, 3] },
+    { name: "F9", pos: [3, 0] }, { name: "F10", pos: [3, 1] }, { name: "F11", pos: [3, 2] },
+    { name: "F12", pos: [3, 3] }, { name: "Print Screen", pos: [0, 4] }, { name: "Insert", pos: [1, 4] },
+    { name: "Delete", pos: [2, 4] }, { name: "Num Lock", pos: [0, 5] }, { name: "Scroll Lock", pos: [1, 5] },
+    { name: "Pause", pos: [3, 4] }, { name: "Tilde", pos: [4, 0] }, { name: "1", pos: [4, 1] },
+    { name: "2", pos: [4, 2] }, { name: "3", pos: [4, 3] }, { name: "4", pos: [4, 4] },
+    { name: "5", pos: [5, 0] }, { name: "6", pos: [5, 1] }, { name: "7", pos: [5, 2] },
+    { name: "8", pos: [5, 3] }, { name: "9", pos: [5, 4] }, { name: "0", pos: [6, 0] },
+    { name: "-", pos: [6, 1] }, { name: "=", pos: [6, 2] }, { name: "Backspace", pos: [6, 3] },
+    { name: "Tab", pos: [7, 0] }, { name: "Q", pos: [7, 1] }, { name: "W", pos: [7, 2] },
+    { name: "E", pos: [7, 3] }, { name: "R", pos: [7, 4] }, { name: "T", pos: [8, 0] },
+    { name: "Y", pos: [8, 1] }, { name: "U", pos: [8, 2] }, { name: "I", pos: [8, 3] },
+    { name: "O", pos: [8, 4] }, { name: "P", pos: [9, 0] }, { name: "[", pos: [9, 1] },
+    { name: "]", pos: [9, 2] }, { name: "\\", pos: [9, 3] }, { name: "Caps Lock", pos: [10, 0] },
+    { name: "A", pos: [10, 1] }, { name: "S", pos: [10, 2] }, { name: "D", pos: [10, 3] },
+    { name: "F", pos: [10, 4] }, { name: "G", pos: [11, 0] }, { name: "H", pos: [11, 1] },
+    { name: "J", pos: [11, 2] }, { name: "K", pos: [11, 3] }, { name: "L", pos: [11, 4] },
+    { name: ";", pos: [12, 0] }, { name: "'", pos: [12, 1] }, { name: "Enter", pos: [12, 2] },
+    { name: "Shift", pos: [13, 0] }, { name: "Z", pos: [13, 1] }, { name: "X", pos: [13, 2] },
+    { name: "C", pos: [13, 3] }, { name: "V", pos: [13, 4] }, { name: "B", pos: [14, 0] },
+    { name: "N", pos: [14, 1] }, { name: "M", pos: [14, 2] }, { name: ",", pos: [14, 3] },
+    { name: ".", pos: [14, 4] }, { name: "/", pos: [14, 5] }, { name: "Ctrl", pos: [15, 0] },
+    { name: "Win", pos: [15, 1] }, { name: "Alt", pos: [15, 2] }, { name: "Space", pos: [15, 3] },
+    { name: "Alt", pos: [15, 4] }, { name: "Ctrl", pos: [16, 0] }, { name: "↑", pos: [16, 1] },
+    { name: "←", pos: [16, 2] }, { name: "↓", pos: [16, 3] }, { name: "→", pos: [16, 4] }
 ];
 
-const vKeyNames = [
-	"Esc",
-	"F1",
-	"F2",
-	"F3",
-	"F4",
-	"F5",
-	"F6",
-	"F7",
-	"F8",
-	"F9",
-	"F10",
-	"F11",
-	"F12",
-	"Print Screen",
-	"Insert",
-	"Delete",
-	"Num Lock",
-	"Scroll Lock",
-	"Pause",
-	"Tilde",
-	"1",
-	"2",
-	"3",
-	"4",
-	"5",
-	"6",
-	"7",
-	"8",
-	"9",
-	"0",
-	"-",
-	"=",
-	"Backspace",
-	"Tab",
-	"Q",
-	"W",
-	"E",
-	"R",
-	"T",
-	"Y",
-	"U",
-	"I",
-	"O",
-	"P",
-	"[",
-	"]",
-	"\\",
-	"Caps Lock",
-	"A",
-	"S",
-	"D",
-	"F",
-	"G",
-	"H",
-	"J",
-	"K",
-	"L",
-	";",
-	"'",
-	"Enter",
-	"Shift",
-	"Z",
-	"X",
-	"C",
-	"V",
-	"B",
-	"N",
-	"M",
-	",",
-	".",
-	"/",
-	"Shift",
-	"Ctrl",
-	"Win",
-	"Alt",
-	"Space",
-	"Alt",
-	"Ctrl",
-	"Arrow Up",
-	"Arrow Left",
-	"Arrow Down",
-	"Arrow Right",
-	"Numpad 0",
-	"Numpad 1",
-	"Numpad 2",
-	"Numpad 3",
-	"Numpad 4",
-	"Numpad 5",
-	"Numpad 6",
-	"Numpad 7",
-	"Numpad 8",
-	"Numpad 9",
-	"Numpad /",
-	"Numpad *",
-	"Numpad -",
-	"Numpad +",
-	"Numpad Enter",
-	"Numpad ."
-];
+/* ===== FUNCIONES HID ===== */
+const HID_REPORT_LENGTH = 32;
+let ACTIVE_ENDPOINT = 1;
 
-const vKeyPositions = [
-	[0, 0],    // Esc
-	[1, 0],    // F1
-	[1, 1],    // F2
-	[1, 2],    // F3
-	[1, 3],    // F4
-	[2, 0],    // F5
-	[2, 1],    // F6
-	[2, 2],    // F7
-	[2, 3],    // F8
-	[3, 0],    // F9
-	[3, 1],    // F10
-	[3, 2],    // F11
-	[3, 3],    // F12
-	[0, 4],    // Print Screen
-	[1, 4],    // Insert
-	[2, 4],    // Delete
-	[0, 5],    // Num Lock
-	[1, 5],    // Scroll Lock
-	[3, 4],    // Pause
-	[4, 0],    // Tilde
-	[4, 1],    // 1
-	[4, 2],    // 2
-	[4, 3],    // 3
-	[4, 4],    // 4
-	[5, 0],    // 5
-	[5, 1],    // 6
-	[5, 2],    // 7
-	[5, 3],    // 8
-	[5, 4],    // 9
-	[6, 0],    // 0
-	[6, 1],    // -
-	[6, 2],    // =
-	[6, 3],    // Backspace
-	[7, 0],    // Tab
-	[7, 1],    // Q
-	[7, 2],    // W
-	[7, 3],    // E
-	[7, 4],    // R
-	[8, 0],    // T
-	[8, 1],    // Y
-	[8, 2],    // U
-	[8, 3],    // I
-	[8, 4],    // O
-	[9, 0],    // P
-	[9, 1],    // [
-	[9, 2],    // ]
-	[9, 3],    // \
-	[10, 0],   // Caps Lock
-	[10, 1],   // A
-	[10, 2],   // S
-	[10, 3],   // D
-	[10, 4],   // F
-	[11, 0],   // G
-	[11, 1],   // H
-	[11, 2],   // J
-	[11, 3],   // K
-	[11, 4],   // L
-	[12, 0],   // ;
-	[12, 1],   // '
-	[12, 2],   // Enter
-	[13, 0],   // Shift
-	[13, 1],   // Z
-	[13, 2],   // X
-	[13, 3],   // C
-	[13, 4],   // V
-	[14, 0],   // B
-	[14, 1],   // N
-	[14, 2],   // M
-	[14, 3],   // ,
-	[14, 4],   // .
-	[14, 5],   // /
-	[15, 0],   // Shift
-	[15, 1],   // Ctrl
-	[15, 2],   // Win
-	[15, 3],   // Alt
-	[15, 4],   // Space
-	[15, 5],   // Alt
-	[16, 0],   // Ctrl
-	[16, 1],   // Arrow Up
-	[16, 2],   // Arrow Left
-	[16, 3],   // Arrow Down
-	[16, 4],   // Arrow Right
-	[17, 0],   // Numpad 0
-	[17, 1],   // Numpad 1
-	[17, 2],   // Numpad 2
-	[17, 3],   // Numpad 3
-	[17, 4],   // Numpad 4
-	[18, 0],   // Numpad 5
-	[18, 1],   // Numpad 6
-	[18, 2],   // Numpad 7
-	[18, 3],   // Numpad 8
-	[18, 4],   // Numpad 9
-	[19, 0],   // Numpad /
-	[19, 1],   // Numpad *
-	[19, 2],   // Numpad -
-	[19, 3],   // Numpad +
-	[19, 4],   // Numpad Enter
-	[20, 0]    // Numpad .
-];
-
-let LEDCount = 0;
-let IsViaKeyboard = false;
-const MainlineQMKFirmware = 1;
-const VIAFirmware = 2;
-const PluginProtocolVersion = "1.0.6";
-
-export function LedNames() {
-	return vKeyNames;
-}
-
-export function LedPositions() {
-	return vKeyPositions;
-}
-
-export function Initialize() {
-	requestFirmwareType();
-	requestQMKVersion();
-	requestSignalRGBProtocolVersion();
-	requestUniqueIdentifier();
-	requestTotalLeds();
-	effectEnable();
-}
-
-export function Render() {
-    const colors = [];
-    for (let i = 0; i < vKeyPositions.length; i++) {
-        const [x, y] = vKeyPositions[i];
-        const color = LightingMode === "Forced" ? hexToRgb(forcedColor) : device.color(x, y);
-        colors.push(...color);
-    }
-    
-    // Envía los colores en paquetes más pequeños
-    const packetSize = 9 * 3; // 9 LEDs por paquete (27 bytes)
-    for (let i = 0; i < colors.length; i += packetSize) {
-        const chunk = colors.slice(i, i + packetSize);
-        safeWrite([0x00, 0x24, i/3, chunk.length/3, ...chunk], 33);
-    }
-}
-
-export function Shutdown(SystemSuspending) {
-	if (SystemSuspending) {
-		sendColors("#000000");
-	} else {
-		if (shutdownMode === "SignalRGB") {
-			sendColors(shutdownColor);
-		} else {
-			effectDisable();
-		}
-	}
-}
-
-function commandHandler() {
-	const readCounts = [];
-  
-	do {
-	  const returnpacket = device.read([0x00], 32, 10);
-	  processCommands(returnpacket);
-  
-	  readCounts.push(device.getLastReadSize());
-  
-	  if (IsViaKeyboard) {
-		device.read([0x00], 32, 10);
-	  }
-	} while (device.getLastReadSize() > 0);
-}
-
-function processCommands(data) {
-	switch (data[1]) {
-	  case 0x21:
-		returnQMKVersion(data);
-		break;
-	  case 0x22:
-		returnSignalRGBProtocolVersion(data);
-		break;
-	  case 0x23:
-		returnUniqueIdentifier(data);
-		break;
-	  case 0x24:
-		sendColors();
-		break;
-	  case 0x27:
-		returnTotalLeds(data);
-		break;
-	  case 0x28:
-		returnFirmwareType(data);
-		break;
-	}
-}
-
-function requestQMKVersion() {
-	device.write([0x00, 0x21], 32);
-	device.pause(30);
-	commandHandler();
-}
-
-function returnQMKVersion(data) {
-	const QMKVersionByte1 = data[2];
-	const QMKVersionByte2 = data[3];
-	const QMKVersionByte3 = data[4];
-	device.log(
-	  "QMK Version: " +
-		QMKVersionByte1 +
-		"." +
-		QMKVersionByte2 +
-		"." +
-		QMKVersionByte3
-	);
-	device.log("QMK SRGB Plugin Version: " + Version());
-	device.pause(30);
-}
-
-function requestSignalRGBProtocolVersion() {
-	device.write([0x00, 0x22], 32);
-	device.pause(30);
-	commandHandler();
-}
-
-function returnSignalRGBProtocolVersion(data) {
-	const ProtocolVersionByte1 = data[2];
-	const ProtocolVersionByte2 = data[3];
-	const ProtocolVersionByte3 = data[4];
-  
-	const SignalRGBProtocolVersion =
-	  ProtocolVersionByte1 +
-	  "." +
-	  ProtocolVersionByte2 +
-	  "." +
-	  ProtocolVersionByte3;
-	device.log(`SignalRGB Protocol Version: ${SignalRGBProtocolVersion}`);
-  
-	if (PluginProtocolVersion !== SignalRGBProtocolVersion) {
-	  device.notify(
-		"Unsupported Protocol Version",
-		`This plugin is intended for SignalRGB Protocol version ${PluginProtocolVersion}. This device is version: ${SignalRGBProtocolVersion}`,
-		2,
-		"Documentation"
-	  );
-	}
-  
-	device.pause(30);
-}
-
-function requestUniqueIdentifier() {
-	if (device.write([0x00, 0x23], 32) === -1) {
-	  device.notify(
-		"Unsupported Firmware",
-		"This device is not running SignalRGB-compatible firmware. Click the Documentation button to learn more.",
-		3,
-		"Documentation"
-	  );
-	}
-  
-	device.pause(30);
-	commandHandler();
-}
-
-function returnUniqueIdentifier(data) {
-	const UniqueIdentifierByte1 = data[2];
-	const UniqueIdentifierByte2 = data[3];
-	const UniqueIdentifierByte3 = data[4];
-  
-	if (
-	  !(
-		UniqueIdentifierByte1 === 0 &&
-		UniqueIdentifierByte2 === 0 &&
-		UniqueIdentifierByte3 === 0
-	  )
-	) {
-	  device.log(
-		"Unique Device Identifier: " +
-		  UniqueIdentifierByte1 +
-		  UniqueIdentifierByte2 +
-		  UniqueIdentifierByte3
-	  );
-	}
-  
-	device.pause(30);
-}
-
-function requestTotalLeds() {
-	device.write([0x00, 0x27], 32);
-	device.pause(30);
-	commandHandler();
-}
-
-function returnTotalLeds(data) {
-	LEDCount = data[2];
-	device.log("Device Total LED Count: " + LEDCount);
-	device.pause(30);
-}
-
-function requestFirmwareType() {
-	device.write([0x00, 0x28], 32);
-	device.pause(30);
-	commandHandler();
-}
-
-function returnFirmwareType(data) {
-	const FirmwareTypeByte = data[2];
-  
-	if (
-	  !(
-		FirmwareTypeByte === MainlineQMKFirmware ||
-		FirmwareTypeByte === VIAFirmware
-	  )
-	) {
-	  device.notify(
-		"Unsupported Firmware",
-		"Click the Documentation button to learn more.",
-		3,
-		"Documentation"
-	  );
-	}
-  
-	if (FirmwareTypeByte === MainlineQMKFirmware) {
-	  IsViaKeyboard = false;
-	  device.log("Firmware Type: Mainline");
-	}
-  
-	if (FirmwareTypeByte === VIAFirmware) {
-	  IsViaKeyboard = true;
-	  device.log("Firmware Type: VIA");
-	}
-  
-	device.pause(30);
-}
-
-// function effectEnable() {
-// 	device.write([0x00, 0x25], 32);
-// 	device.pause(30);
-// }
-
-function effectDisable() {
-	device.write([0x00, 0x26], 32);
-	device.pause(30);
-}
-
-function createSolidColorArray(color) {
-	const rgbdata = new Array(vKeys.length * 3).fill(0);
-  
-	for (let iIdx = 0; iIdx < vKeys.length; iIdx++) {
-	  const iLedIdx = vKeys[iIdx] * 3;
-	  rgbdata[iLedIdx] = color[0];
-	  rgbdata[iLedIdx + 1] = color[1];
-	  rgbdata[iLedIdx + 2] = color[2];
-	}
-  
-	return rgbdata;
-}
-
-function grabColors(overrideColor) {
-	if (overrideColor) {
-	  return createSolidColorArray(hexToRgb(overrideColor));
-	} else if (LightingMode === "Forced") {
-	  return createSolidColorArray(hexToRgb(forcedColor));
-	}
-  
-	const rgbdata = new Array(vKeys.length * 3).fill(0);
-  
-	for (let iIdx = 0; iIdx < vKeys.length; iIdx++) {
-	  const iPxX = vKeyPositions[iIdx][0];
-	  const iPxY = vKeyPositions[iIdx][1];
-	  const color = device.color(iPxX, iPxY);
-  
-	  const iLedIdx = vKeys[iIdx] * 3;
-	  rgbdata[iLedIdx] = color[0];
-	  rgbdata[iLedIdx + 1] = color[1];
-	  rgbdata[iLedIdx + 2] = color[2];
-	}
-  
-	return rgbdata;
-}
-
-function sendColors(overrideColor) {
-	const rgbdata = grabColors(overrideColor);
-  
-	const LedsPerPacket = 9;
-	let BytesSent = 0;
-	let BytesLeft = rgbdata.length;
-  
-	while (BytesLeft > 0) {
-	  const BytesToSend = Math.min(LedsPerPacket * 3, BytesLeft);
-	  StreamLightingData(
-		Math.floor(BytesSent / 3),
-		rgbdata.splice(0, BytesToSend)
-	  );
-  
-	  BytesLeft -= BytesToSend;
-	  BytesSent += BytesToSend;
-	}
-}
-
-function StreamLightingData(StartLedIdx, RGBData) {
-	const packet = [
-	  0x00,
-	  0x24,
-	  StartLedIdx,
-	  Math.floor(RGBData.length / 3),
-	].concat(RGBData);
-	device.write(packet, 33);
-}
-
-function hexToRgb(hex) {
-	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	const colors = [];
-	colors[0] = parseInt(result[1], 16);
-	colors[1] = parseInt(result[2], 16);
-	colors[2] = parseInt(result[3], 16);
-  
-	return colors;
-}
-
-// Cambia el Validate para asegurar el endpoint correcto
-export function Validate(endpoint) {
-    return endpoint.interface === 1 || endpoint.interface === 0; // Algunos teclados usan endpoint 0
-}
-
-// Añade un manejo de errores en las escrituras
-function safeWrite(data, length) {
+function safeHidWrite(data) {
     try {
-        const result = device.write(data, length);
+        // Intenta con endpoint primario
+        if (device.write(data, HID_REPORT_LENGTH, ACTIVE_ENDPOINT) !== -1) {
+            return true;
+        }
+        
+        // Fallback a endpoint alternativo
+        ACTIVE_ENDPOINT = ACTIVE_ENDPOINT === 1 ? 0 : 1;
+        const result = device.write(data, HID_REPORT_LENGTH, ACTIVE_ENDPOINT);
+        
         if (result === -1) {
-            device.notify("Error de escritura", "No se pudo comunicar con el dispositivo", 3);
+            device.log(`Error HID en endpoint ${ACTIVE_ENDPOINT}`);
             return false;
         }
         return true;
+        
     } catch (e) {
-        device.log("Error en escritura: " + e.message);
+        device.notify("Error USB", `No se pudo escribir: ${e.message}`, 3);
         return false;
     }
 }
 
-// Modifica todas las llamadas device.write() para usar safeWrite
-function effectEnable() {
-    if (!safeWrite([0x00, 0x25], 32)) {
-        device.notify("Error", "No se pudo activar el modo Effect", 3);
+function sendColors(colors) {
+    const PACKET_SIZE = 9; // LEDs por paquete
+    for (let i = 0; i < colors.length; i += PACKET_SIZE * 3) {
+        const chunk = colors.slice(i, i + PACKET_SIZE * 3);
+        const packet = [
+            0x00, 0x24,
+            Math.floor(i / 3), // Índice LED inicial
+            Math.min(PACKET_SIZE, chunk.length / 3), // Cantidad de LEDs
+            ...chunk
+        ];
+        
+        if (!safeHidWrite(packet)) {
+            device.log(`Fallo en paquete LED ${i}-${i + PACKET_SIZE}`);
+            break;
+        }
+        device.pause(10); // Estabilidad USB
     }
-    device.pause(30);
+}
+
+/* ===== FUNCIONES PRINCIPALES ===== */
+export function Initialize() {
+    // Verificar conexión HID
+    if (!Validate({ interface: 0 }) && !Validate({ interface: 1 })) {
+        device.notify("Error", "No se detectó el endpoint HID", 3);
+        return;
+    }
+
+    // Activar modo SignalRGB
+    if (!safeHidWrite([0x00, 0x25])) {
+        device.notify("Error", "El teclado no respondió", 3);
+    }
+}
+
+export function Render() {
+    const colors = [];
+    for (const key of KEYMAP) {
+        const color = (LightingMode === "Forced") ? 
+            hexToRgb(forcedColor) : 
+            device.color(key.pos[0], key.pos[1]);
+        colors.push(color[0], color[1], color[2]);
+    }
+    sendColors(colors);
+}
+
+export function Shutdown(SystemSuspending) {
+    if (SystemSuspending) {
+        sendColors(new Array(KEYMAP.length * 3).fill(0)); // Apagar LEDs
+    } else if (shutdownMode === "SignalRGB") {
+        sendColors(hexToRgb(shutdownColor));
+    } else {
+        safeHidWrite([0x00, 0x26]); // Revertir a firmware
+    }
+}
+
+export function LedNames() {
+    return KEYMAP.map(key => key.name);
+}
+
+export function LedPositions() {
+    return KEYMAP.map(key => key.pos);
+}
+
+export function Validate(endpoint) {
+    return endpoint.interface === 0 || endpoint.interface === 1;
+}
+
+function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16)
+    ] : [0, 0, 0];
 }
   
   export function Image() {
