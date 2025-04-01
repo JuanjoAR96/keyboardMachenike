@@ -498,10 +498,10 @@ function returnFirmwareType(data) {
 	device.pause(30);
 }
 
-function effectEnable() {
-	device.write([0x00, 0x25], 32);
-	device.pause(30);
-}
+// function effectEnable() {
+// 	device.write([0x00, 0x25], 32);
+// 	device.pause(30);
+// }
 
 function effectDisable() {
 	device.write([0x00, 0x26], 32);
@@ -583,8 +583,32 @@ function hexToRgb(hex) {
 	return colors;
 }
 
+// Cambia el Validate para asegurar el endpoint correcto
 export function Validate(endpoint) {
-	return endpoint.interface === 1;
+    return endpoint.interface === 1 || endpoint.interface === 0; // Algunos teclados usan endpoint 0
+}
+
+// Añade un manejo de errores en las escrituras
+function safeWrite(data, length) {
+    try {
+        const result = device.write(data, length);
+        if (result === -1) {
+            device.notify("Error de escritura", "No se pudo comunicar con el dispositivo", 3);
+            return false;
+        }
+        return true;
+    } catch (e) {
+        device.log("Error en escritura: " + e.message);
+        return false;
+    }
+}
+
+// Modifica todas las llamadas device.write() para usar safeWrite
+function effectEnable() {
+    if (!safeWrite([0x00, 0x25], 32)) {
+        device.notify("Error", "No se pudo activar el modo Effect", 3);
+    }
+    device.pause(30);
 }
   
   export function Image() {
