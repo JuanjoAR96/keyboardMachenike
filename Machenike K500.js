@@ -307,7 +307,19 @@ export function Initialize() {
 }
 
 export function Render() {
-	sendColors();
+    const colors = [];
+    for (let i = 0; i < vKeyPositions.length; i++) {
+        const [x, y] = vKeyPositions[i];
+        const color = LightingMode === "Forced" ? hexToRgb(forcedColor) : device.color(x, y);
+        colors.push(...color);
+    }
+    
+    // Envía los colores en paquetes más pequeños
+    const packetSize = 9 * 3; // 9 LEDs por paquete (27 bytes)
+    for (let i = 0; i < colors.length; i += packetSize) {
+        const chunk = colors.slice(i, i + packetSize);
+        safeWrite([0x00, 0x24, i/3, chunk.length/3, ...chunk], 33);
+    }
 }
 
 export function Shutdown(SystemSuspending) {
