@@ -1,5 +1,70 @@
 export function Name() {
 	return "Machenike K500 - B94";
+}
+export function Version() {
+	return "1.1.9";
+}
+export function VendorId() {
+	return 0x258a;
+}
+export function ProductId() {
+	return 0x0049;
+}
+export function Publisher() {
+	return "WhirlwindFX";
+}
+export function Documentation() {
+	return "qmk/srgbmods-qmk-firmware";
+}
+export function DeviceType() {
+	return "keyboard";
+}
+export function Size() {
+	return [21, 6];
+}
+export function DefaultPosition() {
+	return [10, 100];
+}
+export function DefaultScale() {
+	return 8.0;
+} // Corregido DefaultScal → DefaultScale
+
+export function ControllableParameters() {
+	return [
+		{
+			property: "shutdownMode",
+			group: "lighting",
+			label: "Shutdown Mode",
+			type: "combobox",
+			values: ["SignalRGB", "Hardware"],
+			default: "SignalRGB",
+		},
+		{
+			property: "shutdownColor",
+			group: "lighting",
+			label: "Shutdown Color",
+			type: "color",
+			default: "#000000",
+		},
+		{
+			property: "LightingMode",
+			group: "lighting",
+			label: "Lighting Mode",
+			type: "combobox",
+			values: ["Canvas", "Forced"],
+			default: "Canvas",
+		},
+		{
+			property: "forcedColor",
+			group: "lighting",
+			label: "Forced Color",
+			type: "color",
+			default: "#009bde",
+		},
+	];
+}
+
+export function Initialize() {
   }
   export function Version() {
 	return "1.1.9";
@@ -298,13 +363,53 @@ export function Name() {
   }
   
   export function Initialize() {
+
 	requestFirmwareType();
 	requestQMKVersion();
 	requestSignalRGBProtocolVersion();
 	requestUniqueIdentifier();
 	requestTotalLeds();
 	effectEnable();
-  }
+}
+
+export function Render() {
+	sendColors();
+}
+
+export function Shutdown(SystemSuspending) {
+	if (SystemSuspending) {
+		sendColors("#000000"); // Apagar luces en suspensión
+	} else {
+		if (shutdownMode === "SignalRGB") {
+			sendColors(shutdownColor);
+		} else {
+			effectDisable();
+		}
+	}
+}
+
+function hexToRgb(hex) {
+	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? [
+		parseInt(result[1], 16),
+		parseInt(result[2], 16),
+		parseInt(result[3], 16)
+	] : [0, 0, 0];
+} // Se optimizó para manejar posibles valores inválidos
+
+function sendColors(overrideColor) {
+	const rgbdata = overrideColor ? createSolidColorArray(hexToRgb(overrideColor)) : grabColors();
+	const LedsPerPacket = 9;
+	let BytesSent = 0;
+	let BytesLeft = rgbdata.length;
+
+	while (BytesLeft > 0) {
+		const BytesToSend = Math.min(LedsPerPacket * 3, BytesLeft);
+		StreamLightingData(Math.floor(BytesSent / 3), rgbdata.splice(0, BytesToSend));
+		BytesLeft -= BytesToSend;
+		BytesSent += BytesToSend;
+	}
+}
   
   export function Render() {
 	sendColors();
